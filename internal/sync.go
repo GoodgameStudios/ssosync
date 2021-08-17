@@ -579,12 +579,16 @@ func (s *syncGSuite) getGoogleGroupsAndUsers(googleGroups []*admin.Group) ([]*ad
 				continue
 			}
 
-			membersUsers = append(membersUsers, u[0])
-
-			_, ok := gUniqUsers[m.Email]
-			if !ok {
-				gUniqUsers[m.Email] = u[0]
+			if len(u) != 0 {
+				membersUsers = append(membersUsers, u[0])
+				_, ok := gUniqUsers[m.Email]
+				if !ok {
+					gUniqUsers[m.Email] = u[0]
+				}
+			} else {
+				log.WithField("member", m.Email).Warn("ignoring group member because it is not a user, looks like a group inside the group")
 			}
+
 		}
 		gGroupsUsers[g.Name] = membersUsers
 	}
