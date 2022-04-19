@@ -516,6 +516,10 @@ func (s *syncGSuite) getGoogleGroupsAndUsers(googleGroups []*admin.Group) ([]*ad
 			if err != nil {
 				return nil, nil, err
 			}
+			if len(u) == 0 {
+				log.WithField("id", m.Email).Warn("missing user")
+				continue
+			}
 
 			if len(u) != 0 {
 				membersUsers = append(membersUsers, u[0])
